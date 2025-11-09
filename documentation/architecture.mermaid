@@ -1,0 +1,32 @@
+flowchart TD
+
+    SRC["(Simulated)
+
+    Sensors from Production Line"]
+
+    ING["data sender
+    ('Ingestion client')"]
+
+    API["Prediction service (Server/FastAPI)"]
+
+    MODEL["Calculate Score
+    ('Model runtime')"]
+
+    CALLER["User/Dashboard
+    ('Response consumer')"]
+
+    MON[Monitoring]
+
+  
+
+    SRC -->|sensor readings| ING
+
+    ING -->|HTTP POST /score | API
+
+    API -->|read & extract features | MODEL
+
+    MODEL -->|score and flag| API
+
+    API -->|HTTP 200 JSON with score and flag| CALLER
+
+    API -->|status and metrics| MON

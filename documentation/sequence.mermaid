@@ -1,0 +1,25 @@
+sequenceDiagram
+
+  participant ING as Ingestion client
+
+  participant API as Prediction service
+
+  participant MODEL as Model runtime
+
+  participant CALLER as Response consumer
+
+  
+
+  ING->>API: POST /score
+
+  API->>MODEL: features
+
+  MODEL-->>API: score and flag
+
+  API-->>ING: 200 JSON with score and flag
+
+  
+
+  CALLER->>API: GET /status
+
+  API-->>CALLER: status normal
