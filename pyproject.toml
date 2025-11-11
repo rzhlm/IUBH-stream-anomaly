@@ -13,5 +13,5 @@ dependencies = [
     "uvicorn>=0.38.0",
 ]
 
-[tool.pyright]
+[tool.basedpyright]
 typeCheckingMode = "strict"
