@@ -8,6 +8,7 @@ current endpoints:
 GET /status
 POST /score (JSON)
 
-diagrams (Mermaid):
-- architecture: [documentation/architecture.mermaid]
-- sequence: [documentation/sequence.mermaid]
+## diagrams (Mermaid):
+ links:
+- [architecture](./documentation/architecture.mermaid)
+- [sequence](./documentation/sequence.mermaid)
