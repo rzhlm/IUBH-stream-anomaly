@@ -1,11 +1,12 @@
 from typing import TYPE_CHECKING
 
 import joblib
+import numpy as np
 import pandas as pd
 from sklearn.ensemble import IsolationForest
 
-if TYPE_CHECKING:
-    import numpy as np
+# if TYPE_CHECKING:
+#    import numpy as np
 
 INPUT_FILE: str = "./src/training/sensor-training-data.csv"
 MODEL_FILE: str = "./src/training/model.joblib"
@@ -27,6 +28,24 @@ def train_model():
 
         clf: IsolationForest = IsolationForest(n_estimators=100, contamination=0.01)
         clf.fit(X_train)
+
+        print(" ### ")
+        print(" training data :")
+        for col in feature_cols:
+            print(f"{col}: mean={df[col].mean():.2f}, std.s={df[col].std():.2f}")
+
+        y_pred = clf.predict(X_train)
+        scores = clf.decision_function(X_train)
+        n_anomalies = np.sum(y_pred == -1)
+        n_normals = np.sum(y_pred == 1)
+
+        print("\n=== Model on training data ===")
+        print(f"Normal points:  {n_normals}")
+        print(f"Anomalies:      {n_anomalies}")
+        print(f"Anomaly ratio:  {n_anomalies / len(X_train):.3f}")
+        print(
+            f"Score stats:    min={scores.min():.3f}, max={scores.max():.3f}, mean={scores.mean():.3f}"
+        )
 
         joblib.dump(clf, MODEL_FILE)
         print("model saved")
