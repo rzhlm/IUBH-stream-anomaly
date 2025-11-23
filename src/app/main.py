@@ -51,10 +51,12 @@ def predict_anomaly(data: SensorData):
     if not ml_model:
         raise HTTPException(status_code=503, detail="Model not availalbe")
 
-    features = np.array([[data.temperature_c, data.humidity_pct, data.sound_db]])
+    features: np.ndarray = np.array(
+        [[data.temperature_c, data.humidity_pct, data.sound_db]]
+    )
+    prediction: int = ml_model.predict(features)[0]  # -1: abnormal, 1: normal
+    score: float = ml_model.decision_function(features)[0]  # lower is worse
 
-    prediction = ml_model.predict(features)[0]  # -1: abnormal, 1: normal
-    score = ml_model.decision_function(features)[0]  # lower is worse
     if prediction == -1:
         is_anomaly = True
     else:

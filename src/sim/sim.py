@@ -57,18 +57,20 @@ def run_simulation():
     try:
         while True:
             # force an anomaly based on setting
-            force_anomaly = (counter % ANOMALY_FREQUENCY == 0) and (counter > 0)
+            force_anomaly: bool = (counter % ANOMALY_FREQUENCY == 0) and (counter > 0)
             data: dict[str, float] = generate_single(is_anomaly=force_anomaly)
 
             try:
-                resp = requests.post(f"{API_URL}/score", json=data, timeout=3)
+                resp: requests.Response = requests.post(
+                    f"{API_URL}/score", json=data, timeout=3
+                )
                 if resp.status_code != 200:
                     print(
                         f"ERROR in live stream, API server returns {resp.status_code}!"
                     )
                     print(f"response: {resp.text}")
                     continue
-                result = resp.json()
+                result: dict[str, bool | float | str] = resp.json()
 
                 status: str = "ANOMALY" if result["is_anomaly"] else "NORMAL"
                 print(
