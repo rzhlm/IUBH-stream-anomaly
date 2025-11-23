@@ -1,6 +1,8 @@
 # from datetime import datetime, timezone
 # from typing import Any
 
+# from datetime import datetime
+import datetime
 from contextlib import asynccontextmanager
 
 import joblib
@@ -22,6 +24,8 @@ class PredictionOut(BaseModel):
 
 
 ml_model = None
+RECENT_SCORES: list[dict] = []
+MAX_RECENT = 150
 
 
 @asynccontextmanager
@@ -62,8 +66,36 @@ def predict_anomaly(data: SensorData):
     else:
         is_anomaly = False
 
-    return {
-        "is_anomaly": is_anomaly,
-        "anomaly_score": float(score),
-        "status": "Anomaly detected" if is_anomaly else "Normal",
-    }
+    result = PredictionOut(
+        is_anomaly=is_anomaly,
+        anomaly_score=score,
+        status="anomaly" if is_anomaly else "normal",
+    )
+
+    RECENT_SCORES.append(
+        {
+            "timestamp": datetime.datetime.utcnow().isoformat(),
+            "temperature_c": data.temperature_c,
+            "humidity_pct": data.humidity_pct,
+            "sound_db": data.sound_db,
+            "is_anomaly": is_anomaly,
+            "anomaly_score": score,
+        }
+    )
+    if len(RECENT_SCORES) > MAX_RECENT:
+        RECENT_SCORES.pop(0)
+
+    # return {
+    # "is_anomaly": is_anomaly,
+    # "anomaly_score": float(score),
+    # "status": "Anomaly detected" if is_anomaly else "Normal",
+    # }
+    return result
+
+
+# @app.get("/recent_scores", response_model = List[])
+@app.get("/recent_scores")
+def recent_scores(limit: int = 20):
+    if limit <= 0:
+        limit = 1
+    return RECENT_SCORES[-limit:]
