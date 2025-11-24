@@ -28,13 +28,14 @@ class PredictionOut(BaseModel):
 ml_model = None
 RECENT_SCORES: list[dict] = []
 MAX_RECENT = 150
+MODEL_FILE: str = "./src/training/model.joblib"
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global ml_model
     try:
-        ml_model = joblib.load("./models/model.joblib")
+        ml_model = joblib.load(MODEL_FILE)
         print("ML model loaded")
     except FileNotFoundError:
         print("model.joblib not found. Perhaps run training first")
