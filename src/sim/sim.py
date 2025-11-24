@@ -83,6 +83,7 @@ def run_simulation():
                 print(f"general simulation failure: error: {e}")
 
             counter += 1
+            counter = 1 if counter >= 5_000 # to avoid high mem use / overflow when running for long periods of time
             time.sleep(SLEEP_INTERVAL)
 
     except KeyboardInterrupt:
