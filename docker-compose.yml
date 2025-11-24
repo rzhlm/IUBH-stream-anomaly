@@ -1,0 +1,39 @@
+version: "1.0"
+
+services:
+  api:
+    build: .
+    container_name: anomaly-api
+    command: ["uv","run","uvicorn","src.app.main:app","--host","0.0.0.0","--port","8000"]
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  dashboard:
+    build: .
+    container_name: anomaly-dashboard
+    command:
+      [
+        "uv","run","streamlit","run", "./src/dash/dash_live.py",
+         "--server.port=8501",
+         "--server.address=0.0.0.0",
+         "--server.headless", "true"
+      ]
+    environment:
+      - API_URL=http://api:8000
+    depends_on:
+      - api
+    ports:
+      - "8501:8501"
+
+  sim:
+   build: .
+   container_name: anomaly-sim
+   command: ["uv","run","python", "./src/sim/sim.py"]
+   environment:
+     - API_URL=http://api:8000
+   depends_on:
+     - api
+ 
+      
