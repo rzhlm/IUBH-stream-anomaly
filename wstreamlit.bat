@@ -1,1 +1,1 @@
-uv run streamlit run .\src\dash\dashboard.py --server.headless true
+uv run streamlit run .\src\dash\dash_live.py --server.headless true
