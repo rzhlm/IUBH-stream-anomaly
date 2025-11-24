@@ -3,6 +3,8 @@
 
 # from datetime import datetime
 import datetime
+
+# import time
 from contextlib import asynccontextmanager
 
 import joblib
@@ -52,6 +54,7 @@ def get_status():
 
 @app.post("/score", response_model=PredictionOut)
 def predict_anomaly(data: SensorData):
+    # start_time = time.perf_counter()
     if not ml_model:
         raise HTTPException(status_code=503, detail="Model not availalbe")
 
@@ -90,6 +93,8 @@ def predict_anomaly(data: SensorData):
     # "anomaly_score": float(score),
     # "status": "Anomaly detected" if is_anomaly else "Normal",
     # }
+    # duration_time = time.perf_counter() - start_time
+    # print(f"inside API (POST): {duration_time=:.3f}")
     return result
 
 

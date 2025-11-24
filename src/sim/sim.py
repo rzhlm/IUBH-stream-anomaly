@@ -7,7 +7,8 @@ import requests
 
 # from datetime import datetime, timezone
 
-API_URL: str = "http://localhost:8000"
+# API_URL: str = "http://localhost:8000"
+API_URL: str = "http://127.0.0.1:8000"  # local dns resolution added 2s of delay!
 SLEEP_INTERVAL: int = 1
 TRAINING_FILE: str = "./src/training/sensor-training-data.csv"
 ANOMALY_FREQUENCY: int = 10  # how often to generate anomalous data
@@ -62,9 +63,13 @@ def run_simulation():
             data: dict[str, float] = generate_single(is_anomaly=force_anomaly)
 
             try:
+                # start = time.time()
                 resp: requests.Response = requests.post(
                     f"{API_URL}/score", json=data, timeout=3
                 )
+                # roundtrip = time.time() - start
+                # print(f"{roundtrip=}")
+
                 if resp.status_code != 200:
                     print(
                         f"ERROR in live stream, API server returns {resp.status_code}!"
@@ -83,7 +88,9 @@ def run_simulation():
                 print(f"general simulation failure: error: {e}")
 
             counter += 1
-            counter = 1 if counter >= 5_000 # to avoid high mem use / overflow when running for long periods of time
+            counter = (
+                1 if counter >= 5_000 else counter
+            )  # to avoid high mem use / overflow when running for long periods of time
             time.sleep(SLEEP_INTERVAL)
 
     except KeyboardInterrupt:
