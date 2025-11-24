@@ -9,6 +9,14 @@ import streamlit as st
 API_URL: str = "http://localhost:8000"
 REFRESH_INTERVAL: int = 5  # seconds
 
+
+def highlight_anomalies(row: pd.Series):
+    if "is_anomaly" in row and row["is_anomaly"]:
+        return ["background-color: rgba(255, 0, 0, 0.2)"] * len(row)
+    else:
+        return [""] * len(row)
+
+
 st.set_page_config(
     page_title="Anomaly Monitor in windmill factory (IUBH)",
     layout="wide",
@@ -119,11 +127,27 @@ with col_right:
 
                     chart_placeholder.line_chart(df_live["anomaly_score"])
 
-                    table_placeholder.markdown("#### Latest events (UTC)")
-                    table_placeholder.dataframe(
-                        df_live.sort_index(ascending=False).head(50),
-                        width="stretch",
-                    )
+                    # table_placeholder.markdown("#### Latest events (UTC)")
+
+                    df_latest = df_live.sort_index(ascending=False).head(50)
+                    red_latest = df_latest.style.apply(highlight_anomalies, axis=1)
+
+                    # st.dataframe(
+                    #    red_latest,
+                    #    width="stretch",
+                    # )
+                    with table_placeholder.container():
+                        st.markdown("#### Latest events (UTC) / live")
+                        st.dataframe(
+                            red_latest,
+                            width="stretch",
+                            height=600,
+                        )
+
+                    # table_placeholder.dataframe(
+                    #    df_live.sort_index(ascending=False).head(50),
+                    #    width="stretch",
+                    # )
                 else:
                     chart_placeholder.empty()
                     table_placeholder.info(
