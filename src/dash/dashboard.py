@@ -73,11 +73,11 @@ with col_left:
                 m2.metric("Humidity", f"{c_humid} %")
                 m3.metric("Sound", f"{c_sound} dB")
 
-                is_anom = data.get("is_anomaly", False)
+                is_anomaly = data.get("is_anomaly", False)
                 score = data.get("anomaly_score", 0.0)
                 status_text = data.get("status", "Unknown")
 
-                if is_anom:
+                if is_anomaly:
                     st.error(f"ANOMALY!!! {status_text} (Score: {score:.3f}")
                 else:
                     st.success(f"All is normal,  {status_text} (Score: {score:.3f}")
@@ -88,7 +88,7 @@ with col_left:
                         "temperature_c": c_temp,
                         "humidity_pct": c_humid,
                         "sound_db": c_sound,
-                        "is_anomaly": is_anom,
+                        "is_anomaly": is_anomaly,
                         "anomaly_score": score,
                     }
                 )

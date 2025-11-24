@@ -42,8 +42,9 @@ def generate_all(filename: str, n_rows: int = 1_000):
         )
         writer.writeheader()
 
-        for _ in range(n_rows):
-            data = generate_single(is_anomaly=False)
+        for i in range(n_rows):
+            is_anomaly = True if i % 100 == 0 else False  # creating 1% abnormals
+            data = generate_single(is_anomaly=is_anomaly)
             writer.writerow(data)
 
     print("finished")
