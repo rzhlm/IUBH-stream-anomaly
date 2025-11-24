@@ -1,12 +1,15 @@
 import time
 from datetime import datetime
+from os import getenv
 
 import pandas as pd
 import requests
 import streamlit as st
 
 # pass
-API_URL: str = "http://localhost:8000"
+# API_URL: str = "http://localhost:8000"
+# API_URL: str = "http://127.0.0.1:8000"
+API_URL: str = getenv("API_URL", default="http://127.0.0.1:8000")
 REFRESH_INTERVAL: int = 5  # seconds
 
 

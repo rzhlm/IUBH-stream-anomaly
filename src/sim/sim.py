@@ -2,13 +2,15 @@ import csv
 import random
 import sys
 import time
+from os import getenv
 
 import requests
 
 # from datetime import datetime, timezone
 
 # API_URL: str = "http://localhost:8000"
-API_URL: str = "http://127.0.0.1:8000"  # local dns resolution added 2s of delay!
+# API_URL: str = "http://127.0.0.1:8000"  # local dns resolution added 2s of delay!
+API_URL: str = getenv("API_URL", default="http://127.0.0.1:8000")
 SLEEP_INTERVAL: int = 1
 TRAINING_FILE: str = "./src/training/sensor-training-data.csv"
 ANOMALY_FREQUENCY: int = 10  # how often to generate anomalous data
