@@ -9,6 +9,7 @@ services:
       - "8000:8000"
     environment:
       - PYTHONUNBUFFERED=1
+    restart: unless-stopped
 
   dashboard:
     build: .
@@ -28,6 +29,7 @@ services:
       - api
     ports:
       - "8501:8501"
+    restart: unless-stopped
 
   sim:
    build: .
@@ -39,5 +41,6 @@ services:
      - API_URL=http://api:8000
    depends_on:
      - api
+   restart: unless-stopped
  
       
