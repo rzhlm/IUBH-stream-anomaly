@@ -35,6 +35,8 @@ class PredictionOut(BaseModel):
     status: str
 
 
+# TODO: RecentScore as a Pydantic class
+
 ml_model = None
 RECENT_SCORES: list[dict] = []
 MAX_RECENT: int = 150
@@ -57,7 +59,7 @@ app = FastAPI(lifespan=lifespan)
 
 
 @app.get("/status")
-def get_status() -> dict[str, bool]:
+def get_status() -> dict[str, bool | str]:
     """GET endpoint /status: returns the current status of the API"""
     return {
         "service": "Anomaly Detection",
@@ -118,7 +120,7 @@ def predict_anomaly(data: SensorData) -> PredictionOut:
 
 # @app.get("/recent_scores", response_model = List[])
 @app.get("/recent_scores")
-def recent_scores(limit: int = 20) -> list[]:
+def recent_scores(limit: int = 20):
     """
     GET endpoint /recent_scores: keeps track of the most recent predictions
     limit: how many scores to return. Default: 20

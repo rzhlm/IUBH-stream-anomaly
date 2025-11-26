@@ -97,7 +97,7 @@ with col_left:
                 status_text = data.get("status", "Unknown")
 
                 if is_anomaly:
-                    st.error(f"ANOMALY!!! {status_text} (Score: {score:.3f}")
+                    st.error(f"ANOMALY!!! {status_text} (Score: {score:.3f})")
                 else:
                     st.success(f"All is normal, {status_text} (score: {score:.3f})")
 
