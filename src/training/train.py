@@ -1,3 +1,8 @@
+"""
+trains the ML prediction model (IsolationForest) on the training data
+saves it using the common joblib structure
+"""
+
 from typing import TYPE_CHECKING
 
 import joblib
@@ -5,15 +10,12 @@ import numpy as np
 import pandas as pd
 from sklearn.ensemble import IsolationForest
 
-# if TYPE_CHECKING:
-#    import numpy as np
-
 INPUT_FILE: str = "./src/training/sensor-training-data.csv"
 MODEL_FILE: str = "./src/training/model.joblib"
 
 
 def train_model():
-    # pass
+    """trains the ML on the input file"""
     try:
         print(f"loading training data from {INPUT_FILE}")
         df: pd.DataFrame = pd.read_csv(INPUT_FILE)
