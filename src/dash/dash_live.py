@@ -1,3 +1,8 @@
+"""
+Monitoring dashboard for the sensor data and anomaly detection
+reads environment variable API_URL, but defaults to http://127.0.0.1:8000
+"""
+
 import time
 from datetime import datetime
 from os import getenv
@@ -6,7 +11,6 @@ import pandas as pd
 import requests
 import streamlit as st
 
-# pass
 # API_URL: str = "http://localhost:8000"
 # API_URL: str = "http://127.0.0.1:8000"
 API_URL: str = getenv("API_URL", default="http://127.0.0.1:8000")
@@ -14,6 +18,7 @@ REFRESH_INTERVAL: int = 5  # seconds
 
 
 def highlight_anomalies(row: pd.Series):
+    """makes anomaly rows' background red in the table"""
     if "is_anomaly" in row and row["is_anomaly"]:
         return ["background-color: rgba(255, 0, 0, 0.2)"] * len(row)
     else:
@@ -33,6 +38,7 @@ st.sidebar.header("System Health")
 
 
 def check_status():
+    """checks & &displays whether API is online or not"""
     try:
         resp = requests.get(f"{API_URL}/status", timeout=3)
         if resp.status_code == 200:
@@ -58,6 +64,7 @@ if "history" not in st.session_state:
 
 col_left, col_right = st.columns(2)
 
+# MANUAL REQUESTS ARE DONE HERE, LEFT COL
 with col_left:
     st.subheader("Manual requests")
     st.write("Use to send 1 datum to API and inspect prediction")
@@ -109,6 +116,7 @@ with col_left:
         except Exception as e:
             st.error(f"General error: {e}")
 
+# AUTOMATIC GRAPHING AND RECENT HISTORY SHOWN HERE: RIGHT COL
 with col_right:
     st.subheader("History & live tracking from API (UTC time)")
     live_mode = st.checkbox(
@@ -191,5 +199,6 @@ with col_right:
 st.markdown("---")
 st.caption(
     "API health via `/status`, "
-    "and model behaviour via manual probes to `/score` with a history of anomaly scores."
+    "and model behaviour via `/score`"
+    " with a history of anomaly scores in `/recent_scores`"
 )

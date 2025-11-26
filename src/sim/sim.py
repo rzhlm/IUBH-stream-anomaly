@@ -1,3 +1,11 @@
+"""
+a) Simulates sensor values, and then sends them to the anomaly scoring API
+anomalous data is also generated (parameter ANOMALY_FREQUENCY) in order to test the prediction API
+
+b) is also used to generate training data, with argument 'train'
+(the anomaly frequency here is set at 1%)
+"""
+
 import csv
 import random
 import sys
@@ -17,6 +25,10 @@ ANOMALY_FREQUENCY: int = 10  # how often to generate anomalous data
 
 
 def generate_single(is_anomaly: bool = False) -> dict[str, float]:
+    """generates sensor values for a single time tick
+    input: is_anomaly (bool)
+    output: 3 sensor values in 1 dict
+    """
     if is_anomaly:
         # pass
         return {
@@ -33,6 +45,11 @@ def generate_single(is_anomaly: bool = False) -> dict[str, float]:
 
 
 def generate_all(filename: str, n_rows: int = 1_000):
+    """
+    generates training data, the equivalent of multiple time ticks
+    input: output filename
+    input: number of rows of sensor values (1 time tick)
+    """
     print(f"generate {n_rows} of training data, into {filename}")
     with open(filename, mode="w", newline="") as f:
         writer = csv.DictWriter(
@@ -54,6 +71,9 @@ def generate_all(filename: str, n_rows: int = 1_000):
 
 
 def run_simulation():
+    """
+    main operating mode: sending (simulated) sensor data to API endpoint
+    """
     print("-" * 80)
     print("starting live stream (simulated)")
     counter: int = 0
