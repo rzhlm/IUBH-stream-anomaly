@@ -2,12 +2,14 @@ flowchart TD
 
     SRC["(Simulated)
 
-    Sensors from Production Line"]
+    Sensors from Production Line
+
+    (sim.py)"]
 
     ING["data sender
     ('Ingestion client')"]
 
-    API["Prediction service (Server/FastAPI)"]
+    API["Prediction service (API Server: FastAPI)"]
 
     MODEL["Calculate Score
     ('Model runtime')"]
@@ -17,7 +19,7 @@ flowchart TD
 
     MON[Monitoring]
 
-  
+
 
     SRC -->|sensor readings| ING
 
