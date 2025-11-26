@@ -24,6 +24,7 @@ docker-compose up --build
 
 - if running natively:
 this project was built using 'uv' for package management, Python version management, venv, etc.
+
 uv is not required as common standards are used: pip, poetry or other tools should work fine.
 
     * start api server:
@@ -60,7 +61,7 @@ POST /score
 This is a proof-of-concept work within a defined task specification.
 For more professional use, one could consider:
 - adding unit testing and system testing
-- add further sensors, and label their normal ranges for supervised ML, with better metrics
+- add further sensors, and label their normal ranges for supervised ML, with more knowable metrics
 - also use statistical outlier detection techniques (e.g. parametric) and/or clustering techniques
 - add periodic retraining to the model
 - add authentication to the API

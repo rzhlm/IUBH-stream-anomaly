@@ -1,7 +1,13 @@
-# from datetime import datetime, timezone
-# from typing import Any
+"""
+This is the main API server (using FastAPI).
+It has 3 endpoints:
+    GET /status : for checking status of server
+    GET /recent_scores: to get the most recent scores
+    POST /score:
+        input: sensor valuues
+        output: anomaly prediction
+"""
 
-# from datetime import datetime
 import datetime
 
 # import time
@@ -14,12 +20,16 @@ from pydantic import BaseModel
 
 
 class SensorData(BaseModel):
+    """Pydantic class: template for POSTing sensor data to API"""
+
     temperature_c: float
     humidity_pct: float
     sound_db: float
 
 
 class PredictionOut(BaseModel):
+    """Pydantic class: template for API output of anomaly prediction"""
+
     is_anomaly: bool
     anomaly_score: float
     status: str
@@ -27,12 +37,13 @@ class PredictionOut(BaseModel):
 
 ml_model = None
 RECENT_SCORES: list[dict] = []
-MAX_RECENT = 150
+MAX_RECENT: int = 150
 MODEL_FILE: str = "./src/training/model.joblib"
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    """Ensures that ML model is loaded while API server is active"""
     global ml_model
     try:
         ml_model = joblib.load(MODEL_FILE)
@@ -46,7 +57,8 @@ app = FastAPI(lifespan=lifespan)
 
 
 @app.get("/status")
-def get_status():
+def get_status() -> dict[str, bool]:
+    """GET endpoint /status: returns the current status of the API"""
     return {
         "service": "Anomaly Detection",
         "model_loaded": ml_model is not None,
@@ -54,7 +66,12 @@ def get_status():
 
 
 @app.post("/score", response_model=PredictionOut)
-def predict_anomaly(data: SensorData):
+def predict_anomaly(data: SensorData) -> PredictionOut:
+    """
+    POST endpoint /score:
+    input: sensor values (SensorData class)
+    output: anomaly prediction (PredictionOut class)
+    """
     # start_time = time.perf_counter()
     if not ml_model:
         raise HTTPException(status_code=503, detail="Model not availalbe")
@@ -101,7 +118,11 @@ def predict_anomaly(data: SensorData):
 
 # @app.get("/recent_scores", response_model = List[])
 @app.get("/recent_scores")
-def recent_scores(limit: int = 20):
+def recent_scores(limit: int = 20) -> list[]:
+    """
+    GET endpoint /recent_scores: keeps track of the most recent predictions
+    limit: how many scores to return. Default: 20
+    """
     if limit <= 0:
         limit = 1
     return RECENT_SCORES[-limit:]
