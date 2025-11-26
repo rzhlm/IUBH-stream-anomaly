@@ -3,8 +3,8 @@ Task 1, in DLBDSMTP01: Project: from Model to Production
 
 ## What this project does:
 - (simulated) sensors in a factory send their data _(sim.py)_
-- goes to API server, server calculates "anomaly score" and returns it _(main.py)_
-- monitoring is done on a HTTP dashboard _(dash_live.py)_
+- goes to API server, server calculates "anomaly score" and returns it _(main.py)_ (using FastAPI)
+- monitoring is done on a HTTP dashboard _(dash_live.py)_ (using Streamlit)
 
 ## How to run:
 a) clone the project from this git repo
@@ -27,7 +27,7 @@ this project was built using 'uv' for package management, Python version managem
 
 uv is not required as common standards are used: pip, poetry or other tools should work fine.
 
-    * start api server:
+   * start api server:
     ```
     uv run uvicorn src.app.main:app --reload --host 0.0.0.0 --port 8000
     ```
