@@ -22,10 +22,10 @@ sequenceDiagram
 
   CALLER->>API: GET /status
 
-  API-->>CALLER: status normal
+  API-->>CALLER: status {"service": ..., "model_loaded": true}
 
 
 
   CALLER->>API: GET /recent_scores
 
-  API-->>CALLER: recent predictions
+  API-->>CALLER: JSON list of recent predictions

@@ -17,7 +17,7 @@ flowchart TD
     CALLER["User/Dashboard
     ('Response consumer')"]
 
-    MON[Monitoring]
+    MON["Monitoring (Streamlit dashboard + /status, /recent_scores)"]
 
 
 
@@ -32,3 +32,5 @@ flowchart TD
     API -->|HTTP 200 JSON with score and flag| CALLER
 
     API -->|status and metrics| MON
+
+__ CALLER -->|HTTP GET /recent_scores | API
