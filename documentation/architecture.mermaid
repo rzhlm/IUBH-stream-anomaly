@@ -25,7 +25,8 @@ flowchart TD
 
     ING -->|HTTP POST /score | API
 
-    API -->|read & extract features | MODEL
+    API -->|"read
+& extract features" | MODEL
 
     MODEL -->|score and flag| API
 
@@ -34,4 +35,5 @@ JSON with score and flag"| CALLER
 
     API -->|status and metrics| MON
 
-    CALLER -->|HTTP GET /recent_scores | API
+    CALLER -->|"HTTP GET
+/recent_scores" | API
